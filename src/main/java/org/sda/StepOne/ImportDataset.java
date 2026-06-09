@@ -4,7 +4,7 @@ import tech.tablesaw.api.Table;
 
 public class ImportDataset {
 
-    public static void main(String[] args) {
+    public static DatasetContainer main(String[] args) {
         try {
             Table studentData = Table.read().csv("src/main/datasets/peserta.csv");
             Table nilaiTesData = Table.read().csv("src/main/datasets/nilai_tes_peserta.csv");
@@ -15,11 +15,13 @@ public class ImportDataset {
             System.out.println("Total Data Nilai Tes: " + nilaiTesData.rowCount());
             System.out.println("Total Data Pilihan Jurusan: " + pilihanJurusanData.rowCount());
             System.out.println("Total Data Jurusan: " + jurusanData.rowCount());
+            return new DatasetContainer(studentData, nilaiTesData, pilihanJurusanData, jurusanData);
         } catch (Exception e) {
             System.out.println(
                 "Terjadi masalah saat mengimpor dataset. Harap periksa kembali sesuai dengan ketentuan README.md"
             );
             System.out.println("Error: " + e.getMessage());
+            return null;
         }
     }
 }
