@@ -1,4 +1,4 @@
-package org.sda.StepOne;
+package org.sda.modules.stepOne;
 
 import tech.tablesaw.api.Table;
 

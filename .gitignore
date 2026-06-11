@@ -42,3 +42,13 @@ bin/
 logs/
 .DS_Store
 Thumbs.db
+
+# ==========================================
+# Temporary Files
+# ==========================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+src/main/datasets/.*
