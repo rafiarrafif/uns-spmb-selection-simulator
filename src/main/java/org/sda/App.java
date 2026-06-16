@@ -1,6 +1,7 @@
 package org.sda;
 
 import org.sda.helpers.Break;
+import org.sda.modules.stepFour.SortingRank;
 import org.sda.modules.stepOne.DatasetContainer;
 import org.sda.modules.stepOne.ImportDataset;
 import org.sda.modules.stepThree.ConnectStudentWithDegree;
@@ -33,8 +34,16 @@ public class App {
         );
         graphVisualization.visualize(studentWithDegree);
 
+        // Step 3: Melakukan pembobotan nilai sesuai jurusan
         Break.waitForUser("melakukan pembobotan nilai sesuai jurusan");
         Table weightedGrades = gradeWeighting.main(studentWithDegree);
+
+        // Step 4: Melakukan sorting dan ranking
+        Break.waitForUser("memulai proses seleksi sorting");
+        Table sortedRank = SortingRank.main(weightedGrades, datasets.jurusanData);
+        System.out.println(sortedRank.first(10));
+
+        // Step 4: Melakukan sorting dan ranking
         System.out.println("System shutting down...");
     }
 }

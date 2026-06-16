@@ -61,7 +61,6 @@ public class gradeWeighting {
                 bobotFinalPertama,
                 bobotFinalKedua
             );
-            System.out.println(finalGrades.first(10));
             return finalGrades;
         } catch (Exception e) {
             System.out.println(
