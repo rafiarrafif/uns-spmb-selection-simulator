@@ -4,6 +4,9 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.swing_viewer.util.DefaultShortcutManager;
+import org.graphstream.ui.view.View;
+import org.graphstream.ui.view.Viewer;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 
@@ -64,6 +67,42 @@ public class graphVisualization {
             }
         }
 
-        graph.display();
+        Viewer viewer = graph.display();
+        viewer.enableAutoLayout();
+        View view = viewer.getDefaultView();
+        if (view instanceof java.awt.Component) {
+            java.awt.Component viewComponent = (java.awt.Component) view;
+            org.graphstream.ui.view.camera.Camera camera = view.getCamera();
+
+            viewComponent.addMouseWheelListener(
+                new java.awt.event.MouseWheelListener() {
+                    @Override
+                    public void mouseWheelMoved(java.awt.event.MouseWheelEvent e) {
+                        int rotation = e.getWheelRotation();
+                        boolean isCtrlDown = e.isControlDown();
+                        boolean isShiftDown = e.isShiftDown();
+
+                        if (isCtrlDown) {
+                            double currentZoom = camera.getViewPercent();
+                            double zoomFactor = (rotation < 0) ? 0.9 : 1.1;
+                            double newZoom = currentZoom * zoomFactor;
+                            if (newZoom > 0.05 && newZoom < 5.0) {
+                                camera.setViewPercent(newZoom);
+                            }
+                        } else if (isShiftDown) {
+                            org.graphstream.ui.geom.Point3 currentCenter = camera.getViewCenter();
+                            double shiftAmount = 0.1 * camera.getViewPercent();
+                            double newX = currentCenter.x + (rotation * shiftAmount);
+                            camera.setViewCenter(newX, currentCenter.y, 0);
+                        } else {
+                            org.graphstream.ui.geom.Point3 currentCenter = camera.getViewCenter();
+                            double shiftAmount = 0.1 * camera.getViewPercent();
+                            double newY = currentCenter.y - (rotation * shiftAmount);
+                            camera.setViewCenter(currentCenter.x, newY, 0);
+                        }
+                    }
+                }
+            );
+        }
     }
 }
