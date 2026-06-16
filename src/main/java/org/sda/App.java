@@ -4,6 +4,7 @@ import org.sda.helpers.Break;
 import org.sda.modules.stepOne.DatasetContainer;
 import org.sda.modules.stepOne.ImportDataset;
 import org.sda.modules.stepThree.ConnectStudentWithDegree;
+import org.sda.modules.stepThree.gradeWeighting;
 import org.sda.modules.stepThree.graphVisualization;
 import org.sda.modules.stepTwo.Screening;
 import tech.tablesaw.api.Table;
@@ -26,10 +27,14 @@ public class App {
         Break.waitForUser("melakukan pengabungan data peserta dengan jurusan yang dipilih");
         Table studentWithDegree = ConnectStudentWithDegree.main(datasets);
 
+        // Step 3: Visualisasi graf untuk data peserta dengan jurusan yang dipilih
         Break.waitForUser(
             "membuka visualisasi graf untuk data peserta dengan jurusan yang dipilih"
         );
         graphVisualization.visualize(studentWithDegree);
+
+        Break.waitForUser("melakukan pembobotan nilai sesuai jurusan");
+        Table weightedGrades = gradeWeighting.main(studentWithDegree);
         System.out.println("System shutting down...");
     }
 }

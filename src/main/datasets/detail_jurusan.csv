@@ -1,4 +1,4 @@
-﻿Id_jurusan,Nama Jurusan,Fakultas,Daya Tampung,IPI Golongan 1,IPI Golongan 2,IPI Golongan 3,Akreditasi,Klaster,Bobot TPS,Bobot Literasi B. Indonesia,Bobot Literasi B. Inggris,Bobot Penalaran Matematika
+﻿Id_jurusan,Nama Jurusan,Fakultas,Daya Tampung,IPI Golongan 1,IPI Golongan 2,IPI Golongan 3,Akreditasi,Klaster,Bobot TPS,Bobot LBI,Bobot LBE,Bobot PM
 70503,Kedokteran,Kedokteran,24,10000000,15000000,25000000,B,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
 79038,Teknik Sipil,Teknik,18,10000000,15000000,25000000,A,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
 85798,Teknik Industri,Teknik,13,10000000,15000000,25000000,A,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
