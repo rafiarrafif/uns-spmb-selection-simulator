@@ -1,5 +1,10 @@
 package org.sda.modules.stepThree;
 
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -70,12 +75,112 @@ public class graphVisualization {
         }
 
         Viewer viewer = graph.display();
+
+        if (viewer.getGraphicGraph().getAttribute("ui.view") instanceof java.awt.Container) {
+            java.awt.Container container = (java.awt.Container) viewer
+                .getGraphicGraph()
+                .getAttribute("ui.view");
+            java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(container);
+            if (window instanceof java.awt.Frame) {
+                java.awt.Frame frame = (java.awt.Frame) window;
+                frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+            }
+        }
+
         viewer.enableAutoLayout();
         View view = viewer.getDefaultView();
+
         if (view instanceof java.awt.Component) {
             java.awt.Component viewComponent = (java.awt.Component) view;
             org.graphstream.ui.view.camera.Camera camera = view.getCamera();
             org.graphstream.ui.view.ViewerPipe pipe = viewer.newViewerPipe();
+
+            if (viewComponent instanceof javax.swing.JPanel) {
+                JPanel mainPanel = (JPanel) viewComponent;
+                mainPanel.setLayout(null);
+
+                JLabel counterLabel = new JLabel("Total Mahasiswa Terhubung: 0");
+                counterLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                counterLabel.setForeground(Color.BLACK);
+                counterLabel.setBackground(new Color(255, 255, 255, 220));
+                counterLabel.setOpaque(true);
+                counterLabel.setBorder(new EmptyBorder(10, 15, 10, 15));
+                counterLabel.setBounds(20, 20, 320, 40);
+                mainPanel.add(counterLabel);
+                mainPanel.setComponentZOrder(counterLabel, 0);
+
+                pipe.addViewerListener(
+                    new org.graphstream.ui.view.ViewerListener() {
+                        @Override
+                        public void viewClosed(String viewName) {}
+
+                        @Override
+                        public void buttonPushed(String id) {
+                            Node clickedNode = graph.getNode(id);
+                            if (clickedNode == null) return;
+
+                            String clickedClass = clickedNode.getAttribute("ui.class").toString();
+
+                            if (
+                                "jurusan".equals(clickedClass) ||
+                                "jurusandimmed".equals(clickedClass)
+                            ) {
+                                for (Node n : graph) {
+                                    String nClass = n.getAttribute("ui.class").toString();
+                                    if (nClass.contains("jurusan")) {
+                                        n.setAttribute("ui.class", "jurusandimmed");
+                                    } else {
+                                        n.setAttribute("ui.class", "cama");
+                                    }
+                                }
+
+                                graph.edges().forEach(e -> {
+                                    String currentClass = e.getAttribute("ui.class").toString();
+                                    if (currentClass.contains("pilihan1")) {
+                                        e.setAttribute("ui.class", "pilihan1");
+                                    } else if (currentClass.contains("pilihan2")) {
+                                        e.setAttribute("ui.class", "pilihan2");
+                                    }
+                                });
+
+                                clickedNode.setAttribute("ui.class", "jurusan");
+
+                                final int[] connectedCount = { 0 };
+
+                                java.util.stream.Stream<Edge> enteringEdges =
+                                    clickedNode.enteringEdges();
+                                enteringEdges.forEach(edge -> {
+                                    String edgeClass = edge.getAttribute("ui.class").toString();
+
+                                    if ("pilihan1".equals(edgeClass)) {
+                                        edge.setAttribute("ui.class", "pilihan1active");
+                                    } else if ("pilihan2".equals(edgeClass)) {
+                                        edge.setAttribute("ui.class", "pilihan2active");
+                                    }
+
+                                    Node studentNode = edge.getSourceNode();
+                                    studentNode.setAttribute("ui.class", "camaactive");
+
+                                    connectedCount[0]++;
+                                });
+
+                                counterLabel.setText(
+                                    "Total Mahasiswa Terhubung: " + connectedCount[0]
+                                );
+                            }
+                        }
+
+                        @Override
+                        public void buttonReleased(String id) {}
+
+                        @Override
+                        public void mouseOver(String id) {}
+
+                        @Override
+                        public void mouseLeft(String id) {}
+                    }
+                );
+            }
 
             viewComponent.addMouseWheelListener(
                 new java.awt.event.MouseWheelListener() {
@@ -104,69 +209,6 @@ public class graphVisualization {
                             camera.setViewCenter(currentCenter.x, newY, 0);
                         }
                     }
-                }
-            );
-
-            pipe.addViewerListener(
-                new org.graphstream.ui.view.ViewerListener() {
-                    @Override
-                    public void viewClosed(String viewName) {}
-
-                    @Override
-                    public void buttonPushed(String id) {
-                        Node clickedNode = graph.getNode(id);
-                        if (clickedNode == null) return;
-
-                        String clickedClass = clickedNode.getAttribute("ui.class").toString();
-
-                        if (
-                            "jurusan".equals(clickedClass) || "jurusandimmed".equals(clickedClass)
-                        ) {
-                            for (Node n : graph) {
-                                String nClass = n.getAttribute("ui.class").toString();
-                                if (nClass.contains("jurusan")) {
-                                    n.setAttribute("ui.class", "jurusandimmed");
-                                } else {
-                                    n.setAttribute("ui.class", "cama");
-                                }
-                            }
-
-                            graph.edges().forEach(e -> {
-                                String currentClass = e.getAttribute("ui.class").toString();
-                                if (currentClass.contains("pilihan1")) {
-                                    e.setAttribute("ui.class", "pilihan1");
-                                } else if (currentClass.contains("pilihan2")) {
-                                    e.setAttribute("ui.class", "pilihan2");
-                                }
-                            });
-
-                            clickedNode.setAttribute("ui.class", "jurusan");
-
-                            java.util.stream.Stream<Edge> enteringEdges =
-                                clickedNode.enteringEdges();
-                            enteringEdges.forEach(edge -> {
-                                String edgeClass = edge.getAttribute("ui.class").toString();
-
-                                if ("pilihan1".equals(edgeClass)) {
-                                    edge.setAttribute("ui.class", "pilihan1active");
-                                } else if ("pilihan2".equals(edgeClass)) {
-                                    edge.setAttribute("ui.class", "pilihan2active");
-                                }
-
-                                Node studentNode = edge.getSourceNode();
-                                studentNode.setAttribute("ui.class", "camaactive");
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void buttonReleased(String id) {}
-
-                    @Override
-                    public void mouseOver(String id) {}
-
-                    @Override
-                    public void mouseLeft(String id) {}
                 }
             );
 
