@@ -2,6 +2,7 @@ package org.sda.modules.stepThree;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.concurrent.CountDownLatch;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,7 +17,8 @@ import tech.tablesaw.api.Table;
 
 public class graphVisualization {
 
-    public static void main(Table studentWithDegree) {
+    public static void visualize(Table studentWithDegree) {
+        System.out.println("Menunggu window visualisasi ditutup untuk melanjutkan...");
         System.setProperty("org.graphstream.ui", "swing");
         Graph graph = new SingleGraph("Hubungan Calon Mahasiswa dan Jurusan");
 
@@ -75,7 +77,7 @@ public class graphVisualization {
         }
 
         Viewer viewer = graph.display();
-
+        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
         if (viewer.getGraphicGraph().getAttribute("ui.view") instanceof java.awt.Container) {
             java.awt.Container container = (java.awt.Container) viewer
                 .getGraphicGraph()
@@ -89,6 +91,8 @@ public class graphVisualization {
 
         viewer.enableAutoLayout();
         View view = viewer.getDefaultView();
+
+        CountDownLatch latch = new CountDownLatch(1);
 
         if (view instanceof java.awt.Component) {
             java.awt.Component viewComponent = (java.awt.Component) view;
@@ -105,6 +109,7 @@ public class graphVisualization {
                 counterLabel.setBackground(new Color(255, 255, 255, 220));
                 counterLabel.setOpaque(true);
                 counterLabel.setBorder(new EmptyBorder(10, 15, 10, 15));
+
                 counterLabel.setBounds(20, 20, 320, 40);
                 mainPanel.add(counterLabel);
                 mainPanel.setComponentZOrder(counterLabel, 0);
@@ -112,7 +117,9 @@ public class graphVisualization {
                 pipe.addViewerListener(
                     new org.graphstream.ui.view.ViewerListener() {
                         @Override
-                        public void viewClosed(String viewName) {}
+                        public void viewClosed(String viewName) {
+                            latch.countDown();
+                        }
 
                         @Override
                         public void buttonPushed(String id) {
@@ -212,16 +219,24 @@ public class graphVisualization {
                 }
             );
 
-            new Thread(() -> {
-                while (true) {
+            Thread pipeThread = new Thread(() -> {
+                while (latch.getCount() > 0) {
                     pipe.pump();
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        break;
                     }
                 }
-            }).start();
+            });
+            pipeThread.setDaemon(true);
+            pipeThread.start();
+        }
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

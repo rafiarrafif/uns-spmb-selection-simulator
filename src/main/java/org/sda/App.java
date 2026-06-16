@@ -15,17 +15,21 @@ public class App {
 
     public static void main(String[] args) {
         // Step 1: Import Dataset
+        Break.waitForUser("mengimpor seluruh dataset");
         DatasetContainer datasets = ImportDataset.main(args);
-        Break.waitForUser("Dataset berhasil di import.");
 
         // Step 2: Screening berkas administrasi mahasiswa
+        Break.waitForUser("melakukan screening data peserta");
         datasets.studentData = Screening.main(datasets.studentData);
-        Break.waitForUser("Data peserta telah di screening administrasi.");
 
         // Step 3: Menghubungkan data mahasiswa dengan jurusan yang dipilih
+        Break.waitForUser("melakukan pengabungan data peserta dengan jurusan yang dipilih");
         Table studentWithDegree = ConnectStudentWithDegree.main(datasets);
-        Break.waitForUser("Data mahasiswa berhasil dihubungkan dengan jurusan yang dipilih.");
-        graphVisualization.main(studentWithDegree);
+
+        Break.waitForUser(
+            "membuka visualisasi graf untuk data peserta dengan jurusan yang dipilih"
+        );
+        graphVisualization.visualize(studentWithDegree);
         System.out.println("System shutting down...");
     }
 }

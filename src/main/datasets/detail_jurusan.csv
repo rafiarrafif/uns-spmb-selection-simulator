@@ -1,22 +1,22 @@
-Id_jurusan,Nama Jurusan,Fakultas,Daya Tampung,IPI Golongan 1,IPI Golongan 2,IPI Golongan 3,Akreditasi
-70503,Kedokteran,Kedokteran,24,10000000,15000000,25000000,B
-79038,Teknik Sipil,Teknik,18,10000000,15000000,25000000,A
-85798,Teknik Industri,Teknik,13,10000000,15000000,25000000,A
-71411,Informatika,Teknologi Informasi dan Sains Data,15,10000000,15000000,25000000,Unggul
-43506,Sains Data,Teknologi Informasi dan Sains Data,6,10000000,15000000,25000000,B
-93296,Statistika,Matematika dan Ilmu Pengetahuan Alam,11,10000000,15000000,25000000,A
-59278,Agroteknologi,Pertanian,18,10000000,15000000,25000000,A
-37897,Ilmu Hukum,Hukum,60,10000000,15000000,20000000,Unggul
-24156,Akuntansi,Ekonomi dan Bisnis,17,10000000,15000000,20000000,Unggul
-54476,Manajemen,Ekonomi dan Bisnis,20,10000000,15000000,20000000,Unggul
-84822,Bisnis Digital,Ekonomi dan Bisnis,12,10000000,15000000,20000000,A
-21970,Ilmu Komunikasi,Ilmu Sosial dan Politik,14,10000000,15000000,20000000,B
-12372,Sosiologi,Ilmu Sosial dan Politik,14,10000000,15000000,20000000,B
-36547,Hubungan Internasional,Ilmu Sosial dan Politik,9,10000000,15000000,20000000,B
-53300,Ilmu Administrasi Negara,Ilmu Sosial dan Politik,14,10000000,15000000,20000000,B
-40389,Psikologi,Psikologi,30,10000000,15000000,20000000,Unggul
-62191,PGSD,Keguruan dan Ilmu Pendidikan,20,10000000,15000000,20000000,B
-48648,Sastra Indonesia,Ilmu Budaya,9,6000000,10000000,15000000,A
-16405,Sastra Inggris,Ilmu Budaya,9,6000000,10000000,15000000,B
-19071,Sastra Daerah (Jawa),Ilmu Budaya,9,6000000,10000000,15000000,A
-52609,Bahasa dan Sastra Arab,Ilmu Budaya,9,6000000,10000000,15000000,B
+﻿Id_jurusan,Nama Jurusan,Fakultas,Daya Tampung,IPI Golongan 1,IPI Golongan 2,IPI Golongan 3,Akreditasi,Klaster,Bobot TPS,Bobot Literasi B. Indonesia,Bobot Literasi B. Inggris,Bobot Penalaran Matematika
+70503,Kedokteran,Kedokteran,24,10000000,15000000,25000000,B,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+79038,Teknik Sipil,Teknik,18,10000000,15000000,25000000,A,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+85798,Teknik Industri,Teknik,13,10000000,15000000,25000000,A,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+71411,Informatika,Teknologi Informasi dan Sains Data,15,10000000,15000000,25000000,Unggul,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+43506,Sains Data,Teknologi Informasi dan Sains Data,6,10000000,15000000,25000000,B,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+93296,Statistika,Matematika dan Ilmu Pengetahuan Alam,11,10000000,15000000,25000000,A,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+59278,Agroteknologi,Pertanian,18,10000000,15000000,25000000,A,"Sains, Teknologi & Kedokteran",25%,10%,15%,50%
+37897,Ilmu Hukum,Hukum,60,10000000,15000000,20000000,Unggul,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+24156,Akuntansi,Ekonomi dan Bisnis,17,10000000,15000000,20000000,Unggul,Ekonomi & Bisnis,25%,15%,20%,40%
+54476,Manajemen,Ekonomi dan Bisnis,20,10000000,15000000,20000000,Unggul,Ekonomi & Bisnis,25%,15%,20%,40%
+84822,Bisnis Digital,Ekonomi dan Bisnis,12,10000000,15000000,20000000,A,Ekonomi & Bisnis,25%,15%,20%,40%
+21970,Ilmu Komunikasi,Ilmu Sosial dan Politik,14,10000000,15000000,20000000,B,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+12372,Sosiologi,Ilmu Sosial dan Politik,14,10000000,15000000,20000000,B,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+36547,Hubungan Internasional,Ilmu Sosial dan Politik,9,10000000,15000000,20000000,B,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+53300,Ilmu Administrasi Negara,Ilmu Sosial dan Politik,14,10000000,15000000,20000000,B,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+40389,Psikologi,Psikologi,30,10000000,15000000,20000000,Unggul,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+62191,PGSD,Keguruan dan Ilmu Pendidikan,20,10000000,15000000,20000000,B,"Sosial, Hukum & Psikologi",20%,40%,20%,20%
+48648,Sastra Indonesia,Ilmu Budaya,9,6000000,10000000,15000000,A,Ilmu Budaya & Sastra,15%,40%,35%,10%
+16405,Sastra Inggris,Ilmu Budaya,9,6000000,10000000,15000000,B,Ilmu Budaya & Sastra,15%,40%,35%,10%
+19071,Sastra Daerah (Jawa),Ilmu Budaya,9,6000000,10000000,15000000,A,Ilmu Budaya & Sastra,15%,40%,35%,10%
+52609,Bahasa dan Sastra Arab,Ilmu Budaya,9,6000000,10000000,15000000,B,Ilmu Budaya & Sastra,15%,40%,35%,10%

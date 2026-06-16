@@ -11,7 +11,7 @@ public class Break {
     }
 
     public static void waitForUser(String message) {
-        System.out.println("\n" + message + " (Tekan Enter untuk melanjutkan...)");
+        System.out.println("\nTekan Enter untuk " + message + "...");
         try {
             System.in.read();
         } catch (Exception e) {
