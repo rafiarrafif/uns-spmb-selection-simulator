@@ -30,42 +30,30 @@ public class SortingRank {
                 );
             }
 
-            Map<Integer, List<Peserta>> applicantsByJur1 = new HashMap<>();
-            for (Peserta p : semuaPeserta) {
-                applicantsByJur1.computeIfAbsent(p.getJur1(), k -> new ArrayList<>()).add(p);
-            }
+            Map<String, String> statusDiterima = new HashMap<>(); // ID Peserta -> ID Jurusan yang menerima
+            Map<Integer, List<Peserta>> daftarDiterimaPerJurusan = new HashMap<>();
 
-            Set<String> mhsLolos = new HashSet<>();
-            Map<Integer, List<Object[]>> hasilPerJurusan = new HashMap<>();
+            Map<Integer, List<Peserta>> applicantsByJur1 = new HashMap<>();
+            for (Peserta p : semuaPeserta)
+                applicantsByJur1.computeIfAbsent(p.getJur1(), k -> new ArrayList<>()).add(p);
 
             for (Integer idJur : kuotaMap.keySet()) {
                 List<Peserta> list = applicantsByJur1.getOrDefault(idJur, new ArrayList<>());
                 MergeSort.sort(list, 1);
-
                 int kuota = kuotaMap.get(idJur);
-                List<Object[]> rows = new ArrayList<>();
-
-                for (int i = 0; i < list.size(); i++) {
+                for (int i = 0; i < Math.min(list.size(), kuota); i++) {
                     Peserta p = list.get(i);
-                    boolean diterima = (i < kuota);
-                    if (diterima) {
-                        mhsLolos.add(p.getId());
-                        kuota--;
-                    }
-                    rows.add(new Object[] {
+                    statusDiterima.put(
                         p.getId(),
-                        (i + 1),
-                        p.getBobot1(),
-                        diterima ? "Diterima" : "Tidak Diterima",
-                    });
+                        "Jurusan_" + idJur + "|" + (i + 1) + "|" + p.getBobot1()
+                    );
+                    daftarDiterimaPerJurusan.computeIfAbsent(idJur, k -> new ArrayList<>()).add(p);
                 }
-                hasilPerJurusan.put(idJur, rows);
-                kuotaMap.put(idJur, kuota);
             }
 
             Map<Integer, List<Peserta>> applicantsByJur2 = new HashMap<>();
             for (Peserta p : semuaPeserta) {
-                if (!mhsLolos.contains(p.getId())) {
+                if (!statusDiterima.containsKey(p.getId())) {
                     applicantsByJur2.computeIfAbsent(p.getJur2(), k -> new ArrayList<>()).add(p);
                 }
             }
@@ -73,28 +61,27 @@ public class SortingRank {
             for (Integer idJur : kuotaMap.keySet()) {
                 List<Peserta> list = applicantsByJur2.getOrDefault(idJur, new ArrayList<>());
                 MergeSort.sort(list, 2);
+                int kuotaTerpakai = daftarDiterimaPerJurusan
+                    .getOrDefault(idJur, new ArrayList<>())
+                    .size();
+                int kuotaSisa = kuotaMap.get(idJur) - kuotaTerpakai;
 
-                int kuotaSisa = kuotaMap.get(idJur);
-                List<Object[]> rows = hasilPerJurusan.get(idJur);
-
-                for (int i = 0; i < list.size(); i++) {
+                for (int i = 0; i < Math.min(list.size(), kuotaSisa); i++) {
                     Peserta p = list.get(i);
-                    boolean diterima = (i < kuotaSisa);
-                    if (diterima) {
-                        mhsLolos.add(p.getId());
-                        kuotaSisa--;
-                    }
-                    rows.add(new Object[] {
+                    statusDiterima.put(
                         p.getId(),
-                        (i + 1),
-                        p.getBobot2(),
-                        diterima ? "Diterima" : "Tidak Diterima",
-                    });
+                        "Jurusan_" + idJur + "|" + (kuotaTerpakai + i + 1) + "|" + p.getBobot2()
+                    );
+                    daftarDiterimaPerJurusan.computeIfAbsent(idJur, k -> new ArrayList<>()).add(p);
                 }
             }
 
             Map<Integer, Table> finalResult = new HashMap<>();
-            for (Integer idJur : hasilPerJurusan.keySet()) {
+            for (Integer idJur : kuotaMap.keySet()) {
+                List<Peserta> listJurusan = daftarDiterimaPerJurusan.getOrDefault(
+                    idJur,
+                    new ArrayList<>()
+                );
                 Table table = Table.create("Jurusan_" + idJur).addColumns(
                     StringColumn.create("ID Peserta"),
                     IntColumn.create("Ranking"),
@@ -102,18 +89,19 @@ public class SortingRank {
                     StringColumn.create("Status")
                 );
 
-                for (Object[] row : hasilPerJurusan.get(idJur)) {
-                    table.stringColumn("ID Peserta").append((String) row[0]);
-                    table.intColumn("Ranking").append((Integer) row[1]);
-                    table.doubleColumn("Nilai Final").append((Double) row[2]);
-                    table.stringColumn("Status").append((String) row[3]);
+                for (int i = 0; i < listJurusan.size(); i++) {
+                    Peserta p = listJurusan.get(i);
+                    String[] info = statusDiterima.get(p.getId()).split("\\|");
+                    table.stringColumn("ID Peserta").append(p.getId());
+                    table.intColumn("Ranking").append(Integer.parseInt(info[1]));
+                    table.doubleColumn("Nilai Final").append(Double.parseDouble(info[2]));
+                    table.stringColumn("Status").append("Diterima");
                 }
                 finalResult.put(idJur, table);
             }
-
             return finalResult;
         } catch (Exception e) {
-            System.out.println("Error during sorting and ranking: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
