@@ -1,5 +1,6 @@
 package org.sda;
 
+import java.util.Map;
 import org.sda.helpers.Break;
 import org.sda.modules.stepFour.SortingRank;
 import org.sda.modules.stepOne.DatasetContainer;
@@ -40,8 +41,7 @@ public class App {
 
         // Step 4: Melakukan sorting dan ranking
         Break.waitForUser("memulai proses seleksi sorting");
-        Table sortedRank = SortingRank.main(weightedGrades, datasets.jurusanData);
-        System.out.println(sortedRank.first(10));
+        Map<String, Table> hasilSeleksi = SortingRank.main(weightedGrades, datasets.jurusanData);
 
         // Step 4: Melakukan sorting dan ranking
         System.out.println("System shutting down...");

@@ -7,7 +7,7 @@ import tech.tablesaw.api.*;
 
 public class SortingRank {
 
-    public static Table main(Table weightedGrades, Table infoJurusan) {
+    public static Map<String, Table> main(Table weightedGrades, Table infoJurusan) {
         try {
             Map<Integer, Integer> kuotaMap = new HashMap<>();
             for (int i = 0; i < infoJurusan.rowCount(); i++) {
@@ -84,33 +84,36 @@ public class SortingRank {
                 kuotaMap.put(idJur, kuotaSisa);
             }
 
-            StringColumn resId = StringColumn.create("ID Calon Mahasiswa");
-            StringColumn resStatus = StringColumn.create("Status");
-            StringColumn resDiterima = StringColumn.create("Diterima Pada");
-            StringColumn resRank1 = StringColumn.create("Peringkat pada jurusan pertama");
-            StringColumn resRank2 = StringColumn.create("Peringkat pada jurusan kedua");
+            StringColumn lolosId = StringColumn.create("ID Calon Mahasiswa");
+            IntColumn lolosDiterima = IntColumn.create("ID Jurusan Diterima");
+
+            StringColumn gagalId = StringColumn.create("ID Calon Mahasiswa");
+            StringColumn gagalRank1 = StringColumn.create("Peringkat Pilihan 1");
+            StringColumn gagalRank2 = StringColumn.create("Peringkat Pilihan 2");
+
             for (Peserta p : semuaPeserta) {
-                resId.append(p.getId());
                 if (mhsLolos.contains(p.getId())) {
-                    resStatus.append("Peserta Lolos");
-                    resDiterima.append(String.valueOf(diterimaDi.get(p.getId())));
-                    resRank1.append("-");
-                    resRank2.append("-");
+                    lolosId.append(p.getId());
+                    lolosDiterima.append(diterimaDi.get(p.getId()));
                 } else {
-                    resStatus.append("Peserta Tidak Lolos");
-                    resDiterima.append("-");
-                    resRank1.append(peringkatPilihan1.getOrDefault(p.getId(), "0/0"));
-                    resRank2.append(peringkatPilihan2.getOrDefault(p.getId(), "0/0"));
+                    gagalId.append(p.getId());
+                    gagalRank1.append(peringkatPilihan1.getOrDefault(p.getId(), "0/0"));
+                    gagalRank2.append(peringkatPilihan2.getOrDefault(p.getId(), "0/0"));
                 }
             }
 
-            return Table.create("Hasil Seleksi PMB").addColumns(
-                resId,
-                resStatus,
-                resDiterima,
-                resRank1,
-                resRank2
+            Table tabelLolos = Table.create("Peserta Lolos").addColumns(lolosId, lolosDiterima);
+            Table tabelGagal = Table.create("Peserta Tidak Lolos").addColumns(
+                gagalId,
+                gagalRank1,
+                gagalRank2
             );
+
+            Map<String, Table> hasilSeleksi = new HashMap<>();
+            hasilSeleksi.put("LOLOS", tabelLolos);
+            hasilSeleksi.put("GAGAL", tabelGagal);
+
+            return hasilSeleksi;
         } catch (Exception e) {
             System.out.println("Error during sorting and ranking: " + e.getMessage());
             return null;

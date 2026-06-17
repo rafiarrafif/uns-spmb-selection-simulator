@@ -11,16 +11,23 @@ public class gradeWeighting {
         try {
             Table finalGrades = Table.create("Final Grade");
 
+            System.out.println("Calculating grade weighting...");
+            System.out.print(rawGrades.structure());
+
             StringColumn idCalonMahasiswa = StringColumn.create("ID Calon Mahasiswa");
             IntColumn idJurusanPertama = IntColumn.create("ID Jurusan Pertama");
             IntColumn idJurusanKedua = IntColumn.create("ID Jurusan Kedua");
             DoubleColumn bobotFinalPertama = DoubleColumn.create("Bobot Final Pertama");
             DoubleColumn bobotFinalKedua = DoubleColumn.create("Bobot Final Kedua");
+            IntColumn ipiJurusanPertama = IntColumn.create("IPI Jurusan Pertama");
+            IntColumn ipiJurusanKedua = IntColumn.create("IPI Jurusan Kedua");
 
             for (int i = 0; i < rawGrades.rowCount(); i++) {
                 idCalonMahasiswa.append(rawGrades.stringColumn(0).get(i));
                 idJurusanPertama.append(rawGrades.intColumn(1).get(i));
                 idJurusanKedua.append(rawGrades.intColumn(2).get(i));
+                ipiJurusanPertama.append(rawGrades.intColumn(3).get(i));
+                ipiJurusanKedua.append(rawGrades.intColumn(4).get(i));
 
                 double nilaiTPS = rawGrades.intColumn(15).get(i);
                 double nilaiLBI = rawGrades.intColumn(16).get(i);
@@ -31,26 +38,28 @@ public class gradeWeighting {
                 double bobotLBIPertama = rawGrades.doubleColumn(7).get(i);
                 double bobotLBEPertama = rawGrades.doubleColumn(8).get(i);
                 double bobotPMPertama = rawGrades.doubleColumn(9).get(i);
-                double finalGradePertama =
+                double semiFinalGradePertama =
                     Math.round(
                         ((nilaiTPS * bobotTPSPertama) +
                             (nilaiLBI * bobotLBIPertama) +
                             (nilaiLBE * bobotLBEPertama) +
                             (nilaiPM * bobotPMPertama)) * 100
                     ) / 100.0;
+                double finalGradePertama = semiFinalGradePertama + (ipiJurusanPertama.get(i) * 10);
                 bobotFinalPertama.append(finalGradePertama);
 
                 double bobotTPSKedua = rawGrades.doubleColumn(11).get(i);
                 double bobotLBIKedua = rawGrades.doubleColumn(12).get(i);
                 double bobotLBEKedua = rawGrades.doubleColumn(13).get(i);
                 double bobotPMKedua = rawGrades.doubleColumn(14).get(i);
-                double finalGradeKedua =
+                double SemiFinalGradeKedua =
                     Math.round(
                         ((nilaiTPS * bobotTPSKedua) +
                             (nilaiLBI * bobotLBIKedua) +
                             (nilaiLBE * bobotLBEKedua) +
                             (nilaiPM * bobotPMKedua)) * 100
                     ) / 100.0;
+                double finalGradeKedua = SemiFinalGradeKedua + (ipiJurusanKedua.get(i) * 10);
                 bobotFinalKedua.append(finalGradeKedua);
             }
 
