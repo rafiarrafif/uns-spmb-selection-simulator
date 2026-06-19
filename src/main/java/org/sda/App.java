@@ -2,7 +2,7 @@ package org.sda;
 
 import java.util.Map;
 import org.sda.helpers.Break;
-import org.sda.modules.stepFour.SaveNotPass;
+import org.sda.modules.stepFour.SaveResult;
 import org.sda.modules.stepFour.SortingRank;
 import org.sda.modules.stepOne.DatasetContainer;
 import org.sda.modules.stepOne.ImportDataset;
@@ -44,8 +44,8 @@ public class App {
         Break.waitForUser("memulai proses seleksi sorting");
         Map<Integer, Table> hasilSeleksi = SortingRank.main(weightedGrades, datasets.jurusanData);
 
-        // Step 4: Melakukan sorting dan ranking
-        SaveNotPass.main(hasilSeleksi);
+        // Step 4: Menyimpan selurh
+        SaveResult.main(hasilSeleksi, datasets);
         System.out.println("System shutting down...");
     }
 }

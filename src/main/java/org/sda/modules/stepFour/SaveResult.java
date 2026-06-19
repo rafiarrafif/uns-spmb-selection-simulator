@@ -1,12 +1,14 @@
 package org.sda.modules.stepFour;
 
 import java.util.Map;
+import org.sda.modules.stepOne.DatasetContainer;
 import tech.tablesaw.api.Table;
 
-public class SaveNotPass {
+public class SaveResult {
 
-    public static void main(Map<Integer, Table> hasilSeleksi) {
+    public static void main(Map<Integer, Table> hasilSeleksi, DatasetContainer datasets) {
         try {
+            // Table mergedTable =
             String directoryPath = "src/main/output/final/";
 
             java.io.File directory = new java.io.File(directoryPath);

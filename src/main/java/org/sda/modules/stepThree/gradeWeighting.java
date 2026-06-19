@@ -11,8 +11,7 @@ public class gradeWeighting {
         try {
             Table finalGrades = Table.create("Final Grade");
 
-            System.out.println("Calculating grade weighting...");
-            System.out.print(rawGrades.structure());
+            System.out.println("Menghitung grade weighting...");
 
             StringColumn idCalonMahasiswa = StringColumn.create("ID Calon Mahasiswa");
             IntColumn idJurusanPertama = IntColumn.create("ID Jurusan Pertama");
